@@ -117,7 +117,7 @@ $nachname = $_SESSION['nachname'];
 	$summe_o_sf = md5($mail.$geburtsdatum);
 	
 	//Uploadlink erstellen:
-	$_SESSION['link_upload'] = "https://anmeldung.bbs1-mainz.de/upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz'];
+	$_SESSION['link_upload'] = $url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz'];
 	
 	
 		/*		
@@ -156,7 +156,7 @@ $nachname = $_SESSION['nachname'];
 				echo "<p>&nbsp;</p>";
 				echo "<b>Bitte laden Sie nur PDF-Dateien hoch!</b>";
 				echo "<p>&nbsp;</p>";
-								echo "<form id='form_w' method='post' action='https://anmeldung.bbs1-mainz.de/upload.php'>";
+								echo "<form id='form_w' method='post' action='".$url."upload.php'>";
 								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_zurueck' value='zurück'>";
 								echo "</form>";
 				exit;
@@ -242,14 +242,14 @@ $nachname = $_SESSION['nachname'];
 								//Buttons:
 								
 								echo "<p><b>Nutzen Sie folgenden Link, um jetzt oder später weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
-								echo "<b><a href='https://anmeldung.bbs1-mainz.de/upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."'>https://anmeldung.bbs1-mainz.de/upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."</a></b><br>";
+								echo "<b><a href='".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."'>".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."</a></b><br>";
 								echo "<div style='margin-top: 1em;'><small>(Um diesen Link später nutzen zu können, müssen Sie ihn jetzt speichern oder notieren.)</small></div>";
 								echo "<p>&nbsp;</p>";
 								echo "<form id='form_n' method='post' action='./index.php'>";
 								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_n' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
 								echo "</form>";
 								echo "<p>&nbsp;</p>";
-								echo "<form id='form_w' method='post' action='https://www.bbs1-mainz.com'>";
+								echo "<form id='form_w' method='post' action='".$website."'>";
 								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_website' value='zu unserer Website'>";
 								echo "</form>";
 		
@@ -516,7 +516,7 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 										
 							echo "<p><b>Ihre Anmeldung wurde erfolgreich gespeichert!</b></p>";
 							echo "<div style='padding: 10px; background-color: #E0E0E0; margin-bottom: 20px; border: 2px solid red;'>";
-							echo "<p><b>Laden Sie sich bitte die PDF-Datei <a href='./pdf.php' target='_blank'>anmeldung-bbs1-mainz.pdf</a> herunter!</b></p>";
+							echo "<p><b>Laden Sie sich bitte die PDF-Datei <a href='./pdf.php' target='_blank'>".$datei_pdf_download."</a> herunter!</b></p>";
 							
 							
 							if ($_SESSION['schulform'] != "bs") {
@@ -578,7 +578,7 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 									echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_n' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
 									echo "</form>";
 									echo "<p>&nbsp;</p>";
-									echo "<form id='form_w' method='post' action='https://www.bbs1-mainz.com'>";
+									echo "<form id='form_w' method='post' action='".$website."'>";
 									echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_website' value='zu unserer Website'>";
 									echo "</form>";
 							
@@ -805,7 +805,9 @@ if ($treffer_an > 0 AND $treffer_sum == 0) {
 	
 	<fieldset> 
 	<input type="checkbox" name="dsgvo" value="1" id="dsgvo">
-	<label for="dsgvo"><b>Ich stimme der Datenerfassung gemäß der <a href='./datenschutzerklaerung.pdf' target='_blank'>Datenschutzerkärung der BBS1-Mainz</a> zu.</b></label>
+	<?php
+	echo "<label for='dsgvo'><b>Ich stimme der Datenerfassung gemäß der <a href='./datenschutzerklaerung.pdf' target='_blank'>Datenschutzerkärung der ".$_SESSION['schule_name1']."</a> zu.</b></label>";
+	?>
 	</fieldset>
 	<p></p>
 	
@@ -845,9 +847,10 @@ if ($treffer_an > 0 AND $treffer_sum == 0) {
 		<input style='width: 12em;' method='post' action='./index.php' id='form_z' type="submit" name='submit_zurueck' value="zurück">
 	</form>
 	
-	
-		<form id='form_n' method='post' action='http://www.bbs1-mainz.com'>
-		<input style='width: 12em;' method='post' id='form_n' type="submit" name='submit_neu' value="zu unserer Website">
+	<?php
+		echo "<form id='form_n' method='post' action='".$website."'>";
+		?>
+			<input style='width: 12em;' method='post' id='form_n' type="submit" name='submit_neu' value="zu unserer Website">
 	</form>
 	
 	

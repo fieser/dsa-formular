@@ -117,7 +117,7 @@ $nachname = $_SESSION['nachname'];
 	$summe_o_sf = md5($mail.$geburtsdatum);
 	
 	//Uploadlink erstellen:
-	$_SESSION['link_upload'] = "https://anmeldung.bbs1-mainz.de/upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz'];
+	$_SESSION['link_upload'] = $url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz'];
 	
 	
 		/*		
@@ -165,7 +165,7 @@ $nachname = $_SESSION['nachname'];
 				echo "<p>&nbsp;</p>";
 				echo "<h2><b><font color='red'>Bitte laden Sie nur PDF-Dateien hoch!</font></b></h2>";
 				echo "<p>&nbsp;</p>";
-								echo "<form id='form_w' method='post' action='https://anmeldung.bbs1-mainz.de/upload.php'>";
+								echo "<form id='form_w' method='post' action='".$url."upload.php'>";
 								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_zurueck' value='zurück'>";
 								echo "</form>";
 				exit;
@@ -258,14 +258,14 @@ $nachname = $_SESSION['nachname'];
 								//Buttons:
 								
 								echo "<p><b>Nutzen Sie folgenden Link, um jetzt oder später weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
-								echo "<b><a href='https://anmeldung.bbs1-mainz.de/upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."'>https://anmeldung.bbs1-mainz.de/upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."</a></b><br>";
+								echo "<b><a href='".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."'>".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."</a></b><br>";
 								echo "<div style='margin-top: 1em;'><small>(Um diesen Link später nutzen zu können, müssen Sie ihn jetzt speichern oder notieren.)</small></div>";
 								echo "<p>&nbsp;</p>";
 								echo "<form id='form_n' method='post' action='./index.php'>";
 								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_n' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
 								echo "</form>";
 								echo "<p>&nbsp;</p>";
-								echo "<form id='form_w' method='post' action='https://www.bbs1-mainz.com'>";
+								echo "<form id='form_w' method='post' action='".$website."'>";
 								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_website' value='zu unserer Website'>";
 								echo "</form>";
 		

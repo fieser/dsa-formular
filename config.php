@@ -4,14 +4,19 @@
 
 
  // URL zum Verzeichnis in dem die PHP-Dateien und Unterordner abgelegt wurden:
- $url = "https://service.bbs1-mainz.de/"; // BITTE mit / abschließen!
- 
+ $url = "https://anmeldung.bbs1-mainz.de/"; // BITTE mit / abschließen!
+ $website = "https://www.bbs1-mainz.com";
+ $workdir = "/anmeldung/"; // BITTE mit / beginnen und abschließen!
+ $pfad_verbinden = "/var/www/"; // BITTE mit / abschließen!
+
+ $datei_pdf_download = "anmeldung-bbs1-mainz.pdf";
 
 
 $_SESSION['schule_name1'] = 'Berufsbildende Schule 1';
-$_SESSION['schule_name2'] = '- Gewerbe und Technik -';;
+$_SESSION['schule_name2'] = '- Gewerbe und Technik -';
 $_SESSION['schule_strasse_nr'] = 'Am Judensand 12';
 $_SESSION['schule_plz_ort'] = '55122 Mainz';
+$_SESSION['schule_kurz'] = 'bbs1'; //Bitte nur Kleinbuchstaben
 	
 	
 //Einstellungen:
@@ -27,7 +32,7 @@ $schuljahr_a = "2024-2025"; //Aktuelles Schuljahr
 // Verbindung zur Datenbank aufbauen.
 //include "/var/www/verbinden.php";
 
-include "/var/www/verbinden_temp.php";
+include $pfad_verbinden."verbinden_temp.php";
 
 
 //Schulformen aktivieren/deaktivieren:

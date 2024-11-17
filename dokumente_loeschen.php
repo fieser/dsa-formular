@@ -4,7 +4,7 @@ include("/var/www/html/anmeldung/config.php");
 
 
 // Dateiname und Verzeichnis der zu überprüfenden Datei
-$zipFile = '/var/www/html/anmeldung/dokumente/dokumente.zip';
+$zipFile = '/var/www/html/'.$workdir.'/dokumente/dokumente.zip';
 
 // Abrufen des Timestamps der letzten Änderung der Datei
 $fileModificationTime = file_exists($zipFile) ? filemtime($zipFile) : false;
@@ -20,7 +20,7 @@ foreach ($select_log as $log) {
 
 // Überprüfen, ob der Timestamp aus der Datenbank 30 Minuten jünger ist als das Änderungsdatum der Datei
 if ($last_download && $fileModificationTime && ($last_download > ($fileModificationTime + 30 * 60))) {
-    $directory = '/var/www/html/anmeldung/dokumente'; // Verzeichnis, in dem die Dateien gespeichert sind.
+    $directory = '/var/www/html'.$workdir.'dokumente'; // Verzeichnis, in dem die Dateien gespeichert sind.
 
     // Dateien im Verzeichnis auflisten
     $files = scandir($directory);
