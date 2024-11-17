@@ -1,2 +1,0 @@
-firstnameStudent=Bewerber!C2
-lastnameStudent=Bewerber!B2
