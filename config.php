@@ -18,6 +18,12 @@ $_SESSION['schule_plz_ort'] = '55122 Mainz';
 $vorbelegen_sorge1 = 1; //Adressdaten von Sorgeberechtigter 1 wird bei Minderjährigen mit deren Adressdaten vorbelegt.
 $strasse_pruefen = 1;
 
+//Schuljahr:
+$schuljahresbeginn_n = "18.08.2025"; //Beginn nächstes Schuljahr
+$schuljahresbeginn_a = "26.08.2024"; //Beginn aktuelles Schuljahr
+$schuljahr_n = "2025-2026"; //Nächstes Schuljahr
+$schuljahr_a = "2024-2025"; //Aktuelles Schuljahr
+
 // Verbindung zur Datenbank aufbauen.
 //include "/var/www/verbinden.php";
 
@@ -49,6 +55,8 @@ $upload_dokumente = 1;
 
 $wartungsmodus = 0;
 $wartungsmodus_ende = "01.05.2024"; //einschließlich diesem Datum
+
+$popup_anzeigen_sj = true; // Setze auf false, um das Popup zu deaktivieren
 
 // FUNKTIONEN:
 

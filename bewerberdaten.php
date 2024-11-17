@@ -2,6 +2,34 @@
 
 include("./kopf.php");
 
+?>
+<style>
+        /* Popup-Stil */
+        .popup {
+            display: none; /* Standardmäßig versteckt */
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .overlay {
+            display: none; /* Standardmäßig versteckt */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+    </style>
+<?php
+
 
 date_default_timezone_set('Europe/Berlin');
 
@@ -219,7 +247,29 @@ if (isset($_GET['sf'])) {
 
 
 
-?>
+if ($popup_anzeigen_sj AND $_SESSION['schulform'] != "bs"): 
+    echo '<div class="overlay" id="popupOverlay"></div>';
+    echo "<div class='popup' id='popup'>";
+    echo "<h2 style='margin-top: 0em;'><b>Hinweis</h2></b>";
+    echo "<p>Beachten Sie bitte, dass sich Ihre Anmeldung nicht auf das aktuelle,<br>sondern das kommende <b>Schuljahr ".$schuljahr_n."</b> bezieht!</p>";
+    echo "<p style='margin-bottom: 3em;'>Ihr erste Schultag ist der " . $schuljahresbeginn_n . ".</p>";
+    echo '<button onclick="closePopup()">Schließen</button>';
+    echo '</div>';
+    echo '<script>';
+    echo 'document.getElementById("popup").style.display = "block";';
+    echo 'document.getElementById("popupOverlay").style.display = "block";';
+    echo 'function closePopup() {';
+    echo 'document.getElementById("popup").style.display = "none";';
+    echo 'document.getElementById("popupOverlay").style.display = "none";';
+    echo '}';
+    echo '</script>';
+endif;
+	
+	?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
