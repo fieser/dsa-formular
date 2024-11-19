@@ -252,7 +252,7 @@ if ($popup_anzeigen_sj AND $_SESSION['schulform'] != "bs"):
     echo "<div class='popup' id='popup'>";
     echo "<h2 style='margin-top: 0em;'><b>Hinweis</h2></b>";
     echo "<p>Beachten Sie bitte, dass sich Ihre Anmeldung nicht auf das aktuelle,<br>sondern das kommende <b>Schuljahr ".$schuljahr_n."</b> bezieht!</p>";
-    echo "<p style='margin-bottom: 3em;'>Ihr erste Schultag ist der " . $schuljahresbeginn_n . ".</p>";
+    echo "<p style='margin-bottom: 3em;'>Ihr erster Schultag ist der " . $schuljahresbeginn_n . ".</p>";
     echo '<button onclick="closePopup()">Schließen</button>';
     echo '</div>';
     echo '<script>';
