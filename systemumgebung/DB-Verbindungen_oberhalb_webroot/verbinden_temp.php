@@ -1,7 +1,7 @@
  <?php
 // Zugangsdaten zur Datenbank
-$DB_HOST = "192.168.50.12"; // Öffentliche IP-Adresse Ihres Webservers im Verwaltungsnetzt (dsa-verwaltung)
-$erstes_jahr = 22;
+$DB_HOST = "192.168.50.14"; // Öffentliche IP-Adresse Ihres Webservers im Verwaltungsnetzt (dsa-verwaltung)
+$erstes_jahr = 22; 
 
 $DB_NAME = "anmeldung_temp"; // Datenbankname
 
