@@ -1,4 +1,4 @@
-# dsa-verwaltung
+# dsa-formular
 Verwaltungstool zur Verwaltung digitaler Schüleranmeldungen an BBS für edoo.sys RLP
 
 Das Gesamtprojekt besteht aus 2 Repositorys für 2 Server:
@@ -91,7 +91,8 @@ Diese README.md berücksichtigt beide Repositorys.
 <h2>Interner Webserver</h2>
 <p>Kern des Sytems ist der interne Webserver. Das kann z.B., wie bei uns, eine VM mit einem Linux sein.</p>
 
->[Installationsskript auf Ubuntu 24.04.1 LTS](https://github.com/fieser/dsa-verwaltung/wiki/Installationsskript-auf-Ubuntu-Server-24.04.1-LTS)
+> [!TIP]
+> [Installationsskript auf Ubuntu 24.04.1 LTS](https://github.com/fieser/dsa-verwaltung/wiki/Installationsskript-auf-Ubuntu-Server-24.04.1-LTS)<br>(Dieses Installationsskript erledigt die folgenden Schritte 1 bis 12 in wenigen Sekunden) 
 
 
 
@@ -131,6 +132,8 @@ Dieses Skript befindet sich im Verzeichnis ./export/. Testen Sie es zunächst in
 <h2>Öffentlicher Webserver</h2>
 <p>Dieser Webserver befindet sich außerhalb des Verwaltungsnetzes.<br>Wir haben einen VServer bei <i>Strato</i> - 11,- Euro/M.) - angemietet.</p>
 
+> [!TIP]
+> [Installationsskript für den Formularserver auf Ubuntu 24.04.1 LTS](https://github.com/fieser/dsa-verwaltung/wiki/Installationsskript-f%C3%BCr-den-Formularserver-%28Ubuntu-Server-24.04.1-LTS%29)<br>(Dieses Installationsskript erledigt die folgenden Schritte 1 bis 3 in wenigen Sekunden) 
 	
 1. Installieren und konfigurieren Sie auch hier einen Webserver (Apache mit PHP).
 2. Eine Datenbank wird nicht benötigt.
