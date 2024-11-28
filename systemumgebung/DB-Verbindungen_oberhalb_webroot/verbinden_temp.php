@@ -5,7 +5,7 @@ $erstes_jahr = 22;
 
 $DB_NAME = "anmeldung_temp"; // Datenbankname
 
-$DB_BENUTZER = "anmeldung_temp"; // Benutzername
+$DB_BENUTZER = "remote_temp"; // Benutzername
 $DB_PASSWORT = "IhrStarkesPasswort"; // Passwort
 
 // Zeichenkodierung UTF-8 bei der Verbindung setzen,
