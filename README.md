@@ -175,7 +175,5 @@ Dort muss zumindest die öffentliche IP des internen Webservers freigegeben sein
 5. Richten Sie auf dem internen Werserver zwei Cronjobs ein, die regelmäßig die Dateien <i>check_upload_edoo2anmeldung.sh</i> und vorschaubilder.sh ausführen.<br>In der Datei <i>./systemumgebung/bash-skripte_fuer_DB-Import/Beispiele_crontab-Einträge.txt</i> finden Sie Beispiele zur Einrichtung der Cronjobs.
 6. Sie importieren die edoo.sys-Daten und generieren Vorschaubilder für eingereichte Nachweisdokumente.
 	
-
-
-<p>Alle hier zum Download bereitgestellten Dateien dürfen beliebig angegepasst, weiterentwickelt und weitergereicht werden.
-Die Verwendung erfolgt jedoch auf Ihre eingene Verantwortung. Wir übernehmen keine Haftung für durch deren Nutzung entstandener Schäden.</p>
+## Lizenz
+Dieses Projekt steht unter der GNU General Public License v3.0 (GPLv3). Weitere Informationen finden Sie in der Datei [LICENSE](./LICENSE.txt).
