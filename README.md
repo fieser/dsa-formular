@@ -2,8 +2,8 @@
 Die *Digitale Schüleranmeldung* (DSA) ist ein WebTool zur Verwaltung digitaler Schüleranmeldungen an BBSn mit edoo.sys RLP.
 
 Das Gesamtprojekt besteht aus 2 Repositorys für 2 Server:
-- [github.com/fieser/dsa-formular](github.com/fieser/dsa-formular)
-- [github.com/fieser/dsa-anmeldung](github.com/fieser/dsa-anmeldung)
+- [github.com/fieser/dsa-formular](https://github.com/fieser/dsa-formular)
+- [github.com/fieser/dsa-anmeldung](https://github.com/fieser/dsa-anmeldung)
 
 Diese README.md berücksichtigt beide Repositorys.
 
