@@ -379,7 +379,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 	<?php
 		if ($_SESSION['geschlecht'] != "") {
 			$kuerzel_staatsangehoerigkeit = $_SESSION['geschlecht'];
-		$select_st_k = $db_temp->query("SELECT anzeigeform, langform FROM geschlecht WHERE anzeigeform LIKE '$kuerzel_staatsangehoerigkeit'");
+		$select_st_k = $db_temp->query("SELECT anzeigeform, langform FROM geschlecht WHERE anzeigeform LIKE '$kuerzel_staatsangehoerigkeit' ORDER BY anzeigeform DESC");
 		foreach($select_st_k as $st_k) {
 		echo "<option value='".$st_k['anzeigeform']."'>".$st_k['langform']."</option>";
 		}
@@ -387,7 +387,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			echo "<option value='' disabled selected hidden></option>";
 		}
 	
-			$select_st = $db_temp->query("SELECT anzeigeform, langform FROM geschlecht");
+			$select_st = $db_temp->query("SELECT anzeigeform, langform FROM geschlecht ORDER BY anzeigeform DESC");
 			$treffer_st = $select_st->rowCount();
 			
 			

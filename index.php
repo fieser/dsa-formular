@@ -19,8 +19,9 @@ $jahr2 = $jahr[2].$jahr[3];
 
 include("./config.php");
 
-
-
+if (isset($_GET['test'])) {
+	$_SESSION['test'] = 1;
+}
 
 
 ?>

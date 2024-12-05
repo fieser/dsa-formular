@@ -23,7 +23,11 @@
 
 <a href="http://ilias.bbs1-mainz.de/ilias/goto.php?target=impr_0&client_id=bbs1" target="_blank">Impressum</a> | <i>Made in 2nd Corona</i>
 
-
+<?php
+if ($_SESSION['test'] == 1) {
+  echo "<b>!!! DEMOMODUS !!!</b>";
+}
+?>
 
 
 </div>

@@ -185,46 +185,52 @@ $nachname = $_SESSION['nachname'];
 			//$summe_o_sf = md5($mail.$geburtsdatum);
 			$password = md5(md5($mail.$geburtsdatum).$_SESSION['plz']);  // Dies sollte in einer sicheren Konfigurationsdatei gespeichert werden
 
-			if (encryptFile($uploadedFile, $newFilePath, $password)) {
-				echo "<h2><b><font color='green'>Datei erfolgreich hochgeladen und verschlüsselt.</font></b></h2>";
-				if ($fileCounter == 1) {
-			//		echo "<p>Insgesamt haben Sie heute 1 Datei hochgeladen.</p>";
-				} else {
-			//		echo "<p>Insgesamt haben Sie heute ".$fileCounter." Dateien hochgeladen.</p>";
-				}
-				
-				//Zip-Archiv erstellen:
-				$sourceDir = 'dokumente/'; // Verzeichnis, in dem sich die .enc Dateien befinden
-				$zipFile = $sourceDir . 'dokumente.zip'; // Pfad zur ZIP-Datei
+			//Für die Demo-Funktion:
+			if ($_SESSION['test'] != 1) {
 
-				// Erstellen eines neuen ZIP-Archivs
-				$zip = new ZipArchive();
-
-				// ZIP-Datei öffnen und überschreiben, wenn sie bereits existiert
-				if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-					exit("<h2><b><font color='red'>Konnte ZIP-Datei nicht öffnen oder erstellen.</font></b></h2>");
-				}
-
-				// Dateien im Verzeichnis auflisten
-				$files = new DirectoryIterator($sourceDir);
-				foreach ($files as $file) {
-					if ($file->isFile() && $file->getExtension() === 'enc') {
-						// Datei zum ZIP-Archiv hinzufügen
-						$zip->addFile($file->getPathname(), $file->getFilename());
+				if (encryptFile($uploadedFile, $newFilePath, $password)) {
+					echo "<h2><b><font color='green'>Datei erfolgreich hochgeladen und verschlüsselt.</font></b></h2>";
+					if ($fileCounter == 1) {
+				//		echo "<p>Insgesamt haben Sie heute 1 Datei hochgeladen.</p>";
+					} else {
+				//		echo "<p>Insgesamt haben Sie heute ".$fileCounter." Dateien hochgeladen.</p>";
 					}
+					
+					//Zip-Archiv erstellen:
+					$sourceDir = 'dokumente/'; // Verzeichnis, in dem sich die .enc Dateien befinden
+					$zipFile = $sourceDir . 'dokumente.zip'; // Pfad zur ZIP-Datei
+
+					// Erstellen eines neuen ZIP-Archivs
+					$zip = new ZipArchive();
+
+					// ZIP-Datei öffnen und überschreiben, wenn sie bereits existiert
+					if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+						exit("<h2><b><font color='red'>Konnte ZIP-Datei nicht öffnen oder erstellen.</font></b></h2>");
+					}
+
+					// Dateien im Verzeichnis auflisten
+					$files = new DirectoryIterator($sourceDir);
+					foreach ($files as $file) {
+						if ($file->isFile() && $file->getExtension() === 'enc') {
+							// Datei zum ZIP-Archiv hinzufügen
+							$zip->addFile($file->getPathname(), $file->getFilename());
+						}
+					}
+
+					// ZIP-Archiv abschließen und schließen
+					$zip->close();
+
+					//echo "ZIP-Archiv wurde erfolgreich erstellt: $zipFile";
+					
+					
+					
+					
+					
+				} else {
+					echo "Fehler bei der Verschlüsselung der Datei.";
 				}
-
-				// ZIP-Archiv abschließen und schließen
-				$zip->close();
-
-				//echo "ZIP-Archiv wurde erfolgreich erstellt: $zipFile";
-				
-				
-				 
-				
-				 
 			} else {
-				echo "Fehler bei der Verschlüsselung der Datei.";
+				echo "Es wurde keine Datei hochgeladen, weil Sie sich im Testmodus befinden.";
 			}
 		} else if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_NO_FILE) {
         // Keine Datei wurde hochgeladen
@@ -364,7 +370,7 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 		
 		$time = time();
 		
-		
+		if ($_SESSION['test'] != 1) {
 		
 		//Daten schreiben
 		
@@ -466,6 +472,8 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 							
 							$timestamp = time();
 							$datum = date("Y-m-d");
+
+										
 							
 							if ($db_temp->exec("INSERT INTO `summen`
 									   SET
@@ -547,30 +555,30 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 							
 						//Upload Dokumente:
 							
-						if ($_SERVER['REMOTE_ADDR'] != "217.198.244.140_aus" AND $upload_dokumente == 1 AND $_SESSION['schulform'] != "bs") {
-							//Die Einstellung $upload_dokumente o.ä. muss auch im Verwaltungsnetz entsprechend in config.php eingestellt sein!
+								if ($_SERVER['REMOTE_ADDR'] != "217.198.244.140_aus" AND $upload_dokumente == 1 AND $_SESSION['schulform'] != "bs") {
+									//Die Einstellung $upload_dokumente o.ä. muss auch im Verwaltungsnetz entsprechend in config.php eingestellt sein!
 
-							echo "<hr style='border: 3px solid #4c6586; margin-top: 3em; margin-bottom: 0em;'>";
-							echo "<table>";
-							echo "<tr>";
-							echo "<td>";
-							echo "<img src='./images/upload3.svg' width='130px'>";
-							echo "</td>";
-							echo "<td style='padding-left: 2em;'>";
-							echo "<h2>Upload von Dokumenten als PDF-Datei</h2>";
-							echo "Unterlagen, die wir nicht in beglaubigter Form benötigen <i>(z.B. Halbjahreszeugnis, Lebenslauf und Personalausweis)</i>, können Sie hier hochladen.<br>
-							Die Zusendung per Post oder eine persönliche Abgabe im Sekretariat ist für diese Dokumente dann nicht mehr erforderlich.";
+									echo "<hr style='border: 3px solid #4c6586; margin-top: 3em; margin-bottom: 0em;'>";
+									echo "<table>";
+									echo "<tr>";
+									echo "<td>";
+									echo "<img src='./images/upload3.svg' width='130px'>";
+									echo "</td>";
+									echo "<td style='padding-left: 2em;'>";
+									echo "<h2>Upload von Dokumenten als PDF-Datei</h2>";
+									echo "Unterlagen, die wir nicht in beglaubigter Form benötigen <i>(z.B. Halbjahreszeugnis, Lebenslauf und Personalausweis)</i>, können Sie hier hochladen.<br>
+									Die Zusendung per Post oder eine persönliche Abgabe im Sekretariat ist für diese Dokumente dann nicht mehr erforderlich.";
 
-							echo "<form action='senden.php' method='post' enctype='multipart/form-data'>";
-							echo "<p>Wählen Sie eine Datei zum Hochladen aus:</p>";
-							echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file'>";
-							echo "<input type='submit' style='margin-top: 1.3em;' class='btn btn-default btn-sm' name='upload_submit' value='Hochladen und verschlüsseln'>";
-							echo "</form>";
-							echo "</td>";
-							echo "</tr>";
-							echo "</table>";
-							echo "<hr style='border: 3px solid #4c6586; margin-top: 0.7em; margin-bottom: 3em;'>";
-							}
+									echo "<form action='senden.php' method='post' enctype='multipart/form-data'>";
+									echo "<p>Wählen Sie eine Datei zum Hochladen aus:</p>";
+									echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file'>";
+									echo "<input type='submit' style='margin-top: 1.3em;' class='btn btn-default btn-sm' name='upload_submit' value='Hochladen und verschlüsseln'>";
+									echo "</form>";
+									echo "</td>";
+									echo "</tr>";
+									echo "</table>";
+									echo "<hr style='border: 3px solid #4c6586; margin-top: 0.7em; margin-bottom: 3em;'>";
+									}
 							
 							
 									 echo "<p>&nbsp;</p>";
@@ -588,6 +596,19 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 							}
 
 						}
+
+					} else {
+						// Im Test-Modus:
+						echo "<p><b>Es wurden keine Daten erfasst, weil Sie sich im Testmodus befinden.</b></p>";
+						echo "<p>&nbsp;</p>";
+						echo "<form id='form_n' method='post' action='./index.php'>";
+						echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_n' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
+						echo "</form>";
+						echo "<p>&nbsp;</p>";
+						echo "<form id='form_w' method='post' action='".$website."'>";
+						echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_website' value='zu unserer Website'>";
+						echo "</form>";
+					}
 
 	} else {//Ende Vollständigkeit der Eingaben prüfen
 		echo "Ihre Angaben sind unvollständig!";
