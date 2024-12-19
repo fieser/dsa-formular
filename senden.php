@@ -150,7 +150,34 @@ $nachname = $_SESSION['nachname'];
 			
 			$fileType = mime_content_type($uploadedFile);
 			//$destFile = $uploadDir . $_FILES['uploaded_file']['name'] . '.enc';
-			
+			if ($fileType != 'application/pdf') {
+    if ($fileType == 'image/jpeg' || $fileType == 'image/png' || $fileType == 'image/gif' || $fileType == 'image/bmp') {
+        $img = new Imagick($uploadedFile);
+        $img->setImageFormat('pdf');
+        $pdf = $img->getImageBlob();
+        $destFile = $uploadDir.$summe_o_sf.'.'.time().'.pdf.enc';
+        $fileName = $summe_o_sf.'.'.time().'.pdf.enc';
+        $password = md5(md5($mail.$geburtsdatum).$_SESSION['plz']);
+        $key = openssl_digest($password, 'SHA256', TRUE);
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $encrypted = openssl_encrypt($pdf, 'aes-256-cbc', $key, 0, $iv);
+        $result = file_put_contents($destFile, $iv . $encrypted);
+        if ($result !== false) {
+            echo "<h2><b><font color='green'>Bilddatei erfolgreich in PDF umgewandelt, hochgeladen und verschlüsselt.</font></b></h2>";
+        } else {
+            echo "Fehler bei der Umwandlung, dem Hochladen oder der Verschlüsselung der Datei.";
+        }
+    } else {
+        echo "<p>&nbsp;</p>";
+        echo "<b>Bitte laden Sie nur PDF-Dateien oder Bilddateien im Format JPEG, PNG, GIF oder BMP hoch!</b>";
+        echo "<p>&nbsp;</p>";
+        echo "<form id='form_w' method='post' action='".$url."upload.php'>";
+        echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_zurueck' value='zurück'>";
+        echo "</form>";
+        exit;
+    }
+}
+/*
 			// Überprüfen, ob die Datei eine PDF-Datei ist
 			if ($fileType != 'application/pdf') {
 				echo "<p>&nbsp;</p>";
@@ -161,7 +188,7 @@ $nachname = $_SESSION['nachname'];
 								echo "</form>";
 				exit;
 			}
-			
+*/
 			$destFile = $uploadDir.$summe_o_sf.'.'.time().'.pdf.enc';
 			$fileName = $summe_o_sf.'.'.time().'.pdf.enc';
 
@@ -182,7 +209,7 @@ $nachname = $_SESSION['nachname'];
 					$newFilePath  = $uploadDir . $newFileName;
 					$fileCounter++;
 				}
-			//$summe_o_sf = md5($mail.$geburtsdatum);
+			
 			$password = md5(md5($mail.$geburtsdatum).$_SESSION['plz']);  // Dies sollte in einer sicheren Konfigurationsdatei gespeichert werden
 
 			//Für die Demo-Funktion:
@@ -191,9 +218,9 @@ $nachname = $_SESSION['nachname'];
 				if (encryptFile($uploadedFile, $newFilePath, $password)) {
 					echo "<h2><b><font color='green'>Datei erfolgreich hochgeladen und verschlüsselt.</font></b></h2>";
 					if ($fileCounter == 1) {
-				//		echo "<p>Insgesamt haben Sie heute 1 Datei hochgeladen.</p>";
+				
 					} else {
-				//		echo "<p>Insgesamt haben Sie heute ".$fileCounter." Dateien hochgeladen.</p>";
+				
 					}
 					
 					//Zip-Archiv erstellen:
@@ -220,7 +247,6 @@ $nachname = $_SESSION['nachname'];
 					// ZIP-Archiv abschließen und schließen
 					$zip->close();
 
-					//echo "ZIP-Archiv wurde erfolgreich erstellt: $zipFile";
 					
 					
 					
