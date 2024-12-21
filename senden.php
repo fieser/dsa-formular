@@ -130,97 +130,102 @@ $nachname = $_SESSION['nachname'];
 	
 	if (isset($_POST['upload_submit'])) {
 
-		// Imagick einbinden, ohne Composer
-		function convertImageToPDF($imageFile, $pdfFile) {
-			$imagick = new Imagick($imageFile);
-			$imagick->setImageFormat('pdf');
-			$imagick->writeImages($pdfFile, true);
-			unlink($imageFile); // Ursprüngliche Bilddatei löschen
-			return $pdfFile;
-		}
-		
-		function encryptFile($sourceFile, $destFile, $passphrase) {
-			$key = openssl_digest($passphrase, 'SHA256', TRUE);
-			$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-		
-			$fileContent = file_get_contents($sourceFile);
-			$encrypted = openssl_encrypt($fileContent, 'aes-256-cbc', $key, 0, $iv);
-		
-			// IV an den Anfang des verschlüsselten Inhalts hängen
-			$result = file_put_contents($destFile, $iv . $encrypted);
-			unlink($sourceFile); // Ursprüngliche Datei löschen
-			return $result !== false;
-		}
-		
-		if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES['uploaded_file'])) {
-			if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_OK) {
-				$uploadDir = 'dokumente/';
-				$uploadedFile = $_FILES['uploaded_file']['tmp_name'];
-		
-				$fileType = mime_content_type($uploadedFile);
-				$allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif'];
-		
-				if (!in_array($fileType, $allowedTypes)) {
-					echo "<h2><b><font color='red'>Bitte laden Sie nur PDF oder Bilddateien (JPG, PNG, GIF) hoch!</font></b></h2>";
-					exit;
-				}
-		
-				if ($fileType !== 'application/pdf') {
-					$newPDFPath = $uploadDir . pathinfo($_FILES['uploaded_file']['name'], PATHINFO_FILENAME) . '.pdf';
-					$uploadedFile = convertImageToPDF($uploadedFile, $newPDFPath);
-					$fileType = 'application/pdf';
-				}
-		
-				$destFile = $uploadDir . uniqid() . '.pdf.enc';
-				
-				if (!file_exists($uploadDir)) {
-					mkdir($uploadDir, 0777, true);
-				}
-		
-				$password = md5(md5($mail.$geburtsdatum).$_SESSION['plz']);
-		
-				if (encryptFile($uploadedFile, $destFile, $password)) {
-					echo "<h2><b><font color='green'>Datei erfolgreich hochgeladen, in PDF konvertiert und verschlüsselt.</font></b></h2>";
-		
-					$zipFile = $uploadDir . 'dokumente.zip';
-					$zip = new ZipArchive();
-		
-					if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-						exit("<h2><b><font color='red'>Konnte ZIP-Datei nicht öffnen oder erstellen.</font></b></h2>");
-					}
-		
-					$files = new DirectoryIterator($uploadDir);
-					foreach ($files as $file) {
-						if ($file->isFile() && $file->getExtension() === 'enc') {
-							$zip->addFile($file->getPathname(), $file->getFilename());
-						}
-					}
-		
-					$zip->close();
-		
-				} else {
-					echo "<h2><b><font color='red'>Fehler bei der Verschlüsselung der Datei.</font></b></h2>";
-				}
-			} else if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_NO_FILE) {
-				echo "<h2><b><font color='red'>Bitte wählen Sie eine Datei zum Hochladen aus!</font></b></h2>";
-			} else {
-				echo "<h2><b><font color='red'>Fehler beim Hochladen der Datei. Bitte versuchen Sie es erneut.</font></b></h2>";
-			}
-		} else {
-			if (isset($_POST['upload_submit'])) {
-				echo "<h2><b><font color='red'>Keine Datei zum Hochladen erhalten.</font></b></h2>";
-			}
-		}
-		
-		echo "<p><b>Nutzen Sie folgenden Link, um weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
-		echo "<b><a href='upload.php'>Dokument hochladen</a></b><br>";
-		echo "<form method='post' action='./index.php'>";
-		echo "<input style='width: 20em;' class='btn btn-default btn-sm' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
-		echo "</form>";
-		echo "<form method='post' action='index.php'>";
-		echo "<input style='width: 20em;' class='btn btn-default btn-sm' type='submit' name='submit_website' value='zu unserer Website'>";
-		echo "</form>";
-		
+	
+
+// Imagick einbinden, ohne Composer
+function convertImageToPDF($imageFile, $pdfFile) {
+    $imagick = new Imagick($imageFile);
+    $imagick->setImageFormat('pdf');
+    $imagick->writeImages($pdfFile, true);
+    unlink($imageFile); // Ursprüngliche Bilddatei löschen
+    return $pdfFile;
+}
+
+function encryptFile($sourceFile, $destFile, $passphrase) {
+    $key = openssl_digest($passphrase, 'SHA256', TRUE);
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+
+    $fileContent = file_get_contents($sourceFile);
+    $encrypted = openssl_encrypt($fileContent, 'aes-256-cbc', $key, 0, $iv);
+
+    // IV an den Anfang des verschlüsselten Inhalts hängen
+    $result = file_put_contents($destFile, $iv . $encrypted);
+    unlink($sourceFile); // Ursprüngliche Datei löschen
+    return $result !== false;
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES['uploaded_file'])) {
+    if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = 'dokumente/';
+        $uploadedFile = $_FILES['uploaded_file']['tmp_name'];
+
+        $fileType = mime_content_type($uploadedFile);
+        $allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif'];
+
+        if (!in_array($fileType, $allowedTypes)) {
+            echo "<h2><b><font color='red'>Bitte laden Sie nur PDF oder Bilddateien (JPG, PNG, GIF) hoch!</font></b></h2>";
+            exit;
+        }
+
+        if ($fileType !== 'application/pdf') {
+            $newPDFPath = $uploadDir . pathinfo($_FILES['uploaded_file']['name'], PATHINFO_FILENAME) . '.pdf';
+            $uploadedFile = convertImageToPDF($uploadedFile, $newPDFPath);
+            $fileType = 'application/pdf';
+        }
+
+        // Dateiname generieren basierend auf $summe_o_sf und Zeitstempel
+        $summe_o_sf = md5($mail . $geburtsdatum); // Sicherstellen, dass $mail und $geburtsdatum definiert sind
+        $fileName = $summe_o_sf . '.' . time() . '.pdf.enc';
+        $destFile = $uploadDir . $fileName;
+
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $password = md5(md5($mail . $geburtsdatum) . $_SESSION['plz']);
+
+        if (encryptFile($uploadedFile, $destFile, $password)) {
+            echo "<h2><b><font color='green'>Datei erfolgreich hochgeladen, in PDF konvertiert und verschlüsselt.</font></b></h2>";
+
+            $zipFile = $uploadDir . 'dokumente.zip';
+            $zip = new ZipArchive();
+
+            if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+                exit("<h2><b><font color='red'>Konnte ZIP-Datei nicht öffnen oder erstellen.</font></b></h2>");
+            }
+
+            $files = new DirectoryIterator($uploadDir);
+            foreach ($files as $file) {
+                if ($file->isFile() && $file->getExtension() === 'enc') {
+                    $zip->addFile($file->getPathname(), $file->getFilename());
+                }
+            }
+
+            $zip->close();
+
+        } else {
+            echo "<h2><b><font color='red'>Fehler bei der Verschlüsselung der Datei.</font></b></h2>";
+        }
+    } else if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_NO_FILE) {
+        echo "<h2><b><font color='red'>Bitte wählen Sie eine Datei zum Hochladen aus!</font></b></h2>";
+    } else {
+        echo "<h2><b><font color='red'>Fehler beim Hochladen der Datei. Bitte versuchen Sie es erneut.</font></b></h2>";
+    }
+} else {
+    if (isset($_POST['upload_submit'])) {
+        echo "<h2><b><font color='red'>Keine Datei zum Hochladen erhalten.</font></b></h2>";
+    }
+}
+
+echo "<p><b>Nutzen Sie folgenden Link, um weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
+echo "<b><a href='upload.php'>Dokument hochladen</a></b><br>";
+echo "<form method='post' action='./index.php'>";
+echo "<input style='width: 20em;' class='btn btn-default btn-sm' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
+echo "</form>";
+echo "<form method='post' action='index.php'>";
+echo "<input style='width: 20em;' class='btn btn-default btn-sm' type='submit' name='submit_website' value='zu unserer Website'>";
+echo "</form>";
+
 		
 	} else { //Ende Dateiupload
 	
