@@ -245,7 +245,9 @@ include("./config.php");
 
 							echo "<form action='upload.php' method='post' enctype='multipart/form-data'>";
 							echo "<p>Wählen Sie eine Datei zum Hochladen aus:</p>";
-							echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file'>";
+							//echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file' capture='environment'>";
+							echo "<input type='file' accept='.pdf,application/pdf,image/jpeg,image/png,image/gif,image/bmp,image/webp' name='uploaded_file' capture='environment'>";
+
 							echo "<input type='submit' style='margin-top: 1.3em;' class='btn btn-default btn-sm' name='upload_submit' value='Hochladen und verschlüsseln'>";
 							echo "</form>";
 						} else {

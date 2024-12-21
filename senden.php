@@ -543,7 +543,7 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 									echo "<p>Wählen Sie eine Datei zum Hochladen aus:</p>";
 									
 									//Hochladbare Dateitypen
-									echo "<input type='file' accept='.pdf,application/pdf,image/jpeg,image/png,image/gif,image/bmp,image/webp' name='uploaded_file'>";
+									echo "<input type='file' accept='.pdf,application/pdf,image/jpeg,image/png,image/gif,image/bmp,image/webp' name='uploaded_file' capture='environment'>";
 
 									echo "<input type='submit' style='margin-top: 1.3em;' class='btn btn-default btn-sm' name='upload_submit' value='Hochladen und verschlüsseln'>";
 									echo "</form>";
