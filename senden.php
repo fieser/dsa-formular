@@ -217,13 +217,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES['uploaded_file'])) {
     }
 }
 
-echo "<p><b>Nutzen Sie folgenden Link, um weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
-echo "<b><a href='upload.php'>Dokument hochladen</a></b><br>";
-echo "<form method='post' action='./index.php'>";
-echo "<input style='width: 20em;' class='btn btn-default btn-sm' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
+echo "<p><b>Nutzen Sie folgenden Link, um jetzt oder später weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
+echo "<b><a href='".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."'>".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."</a></b><br>";
+echo "<div style='margin-top: 1em;'><small>(Um diesen Link später nutzen zu können, müssen Sie ihn jetzt speichern oder notieren.)</small></div>";
+echo "<p>&nbsp;</p>";
+echo "<form id='form_n' method='post' action='./index.php'>";
+echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_n' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
 echo "</form>";
-echo "<form method='post' action='index.php'>";
-echo "<input style='width: 20em;' class='btn btn-default btn-sm' type='submit' name='submit_website' value='zu unserer Website'>";
+echo "<p>&nbsp;</p>";
+echo "<form id='form_w' method='post' action='".$website."'>";
+echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_website' value='zu unserer Website'>";
 echo "</form>";
 
 		
@@ -538,7 +541,10 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 
 									echo "<form action='senden.php' method='post' enctype='multipart/form-data'>";
 									echo "<p>Wählen Sie eine Datei zum Hochladen aus:</p>";
-									echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file'>";
+									
+									//Hochladbare Dateitypen
+									echo "<input type='file' accept='.pdf,application/pdf,image/jpeg,image/png,image/gif,image/bmp,image/webp' name='uploaded_file'>";
+
 									echo "<input type='submit' style='margin-top: 1.3em;' class='btn btn-default btn-sm' name='upload_submit' value='Hochladen und verschlüsseln'>";
 									echo "</form>";
 									echo "</td>";
