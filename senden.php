@@ -129,12 +129,48 @@ $nachname = $_SESSION['nachname'];
 	//Dateiupload:
 	
 	if (isset($_POST['upload_submit'])) {
-
+		function correctImageOrientation($imagick) {
+			$orientation = $imagick->getImageOrientation();
+			switch ($orientation) {
+				case Imagick::ORIENTATION_TOPLEFT:
+					// No rotation needed
+					break;
+				case Imagick::ORIENTATION_TOPRIGHT:
+					$imagick->flopImage();
+					break;
+				case Imagick::ORIENTATION_BOTTOMRIGHT:
+					$imagick->rotateImage(new ImagickPixel('none'), 180);
+					break;
+				case Imagick::ORIENTATION_BOTTOMLEFT:
+					$imagick->flopImage();
+					$imagick->rotateImage(new ImagickPixel('none'), 180);
+					break;
+				case Imagick::ORIENTATION_LEFTTOP:
+					$imagick->flopImage();
+					$imagick->rotateImage(new ImagickPixel('none'), -90);
+					break;
+				case Imagick::ORIENTATION_RIGHTTOP:
+					$imagick->rotateImage(new ImagickPixel('none'), 90);
+					break;
+				case Imagick::ORIENTATION_RIGHTBOTTOM:
+					$imagick->flopImage();
+					$imagick->rotateImage(new ImagickPixel('none'), 90);
+					break;
+				case Imagick::ORIENTATION_LEFTBOTTOM:
+					$imagick->rotateImage(new ImagickPixel('none'), -90);
+					break;
+			}
+			$imagick->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
+		}
 	
 
 // Imagick einbinden, ohne Composer
 function convertImageToPDF($imageFile, $pdfFile) {
     $imagick = new Imagick($imageFile);
+	correctImageOrientation($imagick);
+
+        $imagick->resizeImage(600, 0, Imagick::FILTER_LANCZOS, 1);
+
     $imagick->setImageFormat('pdf');
     $imagick->writeImages($pdfFile, true);
     unlink($imageFile); // Ursprüngliche Bilddatei löschen
