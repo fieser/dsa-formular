@@ -316,7 +316,7 @@ if (strtotime($_SESSION['geburtsdatum']) < (time() - 18*365*24*3600)) {
 	
 	<div class="flex-item-left">
         <label for="sorge1_plz">Postleitzahl:</label><br>
-        <input style='width:100%;' type="text" id="sorge1_plz" name="sorge1_plz" value='<?php echo $_SESSION["sorge1_plz"] ?>' pattern="[0-9]+" minlength="5" maxlength="5" <?php echo $required ?>><br>
+        <input style='width:100%;' type="text" id="sorge1_plz" name="sorge1_plz" value='<?php echo $_SESSION["sorge1_plz"] ?>' pattern="[0-9]+" minlength="4" maxlength="5" <?php echo $required ?>><br>
 	</div>
 		
 	<div class="flex-item-right">
@@ -464,7 +464,7 @@ if (strtotime($_SESSION['geburtsdatum']) < (time() - 18*365*24*3600)) {
 	
 	<div class="flex-item-left">
         <label for="sorge2_plz">Postleitzahl:</label><br>
-        <input style='width:100%;' type="text" id="sorge2_plz" name="sorge2_plz" value='<?php echo $_SESSION["sorge2_plz"] ?>' pattern="[0-9]+" minlength="5" maxlength="5" ><br>
+        <input style='width:100%;' type="text" id="sorge2_plz" name="sorge2_plz" value='<?php echo $_SESSION["sorge2_plz"] ?>' pattern="[0-9]+" minlength="4" maxlength="5" ><br>
 	</div>
 		
 	<div class="flex-item-right">
