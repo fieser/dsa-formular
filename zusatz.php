@@ -150,7 +150,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 
@@ -173,7 +173,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 
@@ -237,7 +237,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 			</select><br>
@@ -259,7 +259,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 			</select><br>
@@ -321,7 +321,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 				
@@ -344,7 +344,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 			</select><br>
@@ -405,7 +405,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 				
@@ -443,7 +443,7 @@ $select_sf = $db_temp->query("SELECT name FROM schulformen WHERE kuerzel = '$sf_
 			
 			foreach($select_st as $st) {
 				
-				 echo "<option>".$st['anzeigeform']."</option>";
+				 echo "<option value='".$st['anzeigeform']."'>".$st['anzeigeform']."</option>";
 			}
 		?>
 
@@ -473,17 +473,17 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs1' required='required'>
 		<?php
 		if ($_SESSION['fs1'] != "") {
-			echo "<option>".$_SESSION['fs1']."</option>";
+			echo "<option value='".$_SESSION['fs1']."' selected>".$_SESSION['fs1']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
-				<option>Englisch</option>
-				<option>Französisch</option>
-				<option>Spanisch</option>
-				<option>Latein</option>
-				<option>Italienisch</option>
-				<option>Russisch</option>
+				<option value="Englisch">Englisch</option>
+				<option value="Französisch">Französisch</option>
+				<option value="Spanisch">Spanisch</option>
+				<option value="Latein">Latein</option>
+				<option value="Italienisch">Italienisch</option>
+				<option value="Russisch">Russisch</option>
 			</select><br>
 		</div>
 
@@ -493,20 +493,20 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs1_von' required=''>
 		<?php
 		if ($_SESSION['fs1_von'] != "") {
-			echo "<option>".$_SESSION['fs1_von']."</option>";
+			echo "<option value='".$_SESSION['fs1_von']."'>".$_SESSION['fs1_von']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
-				<option>Klasse 5</option>
-				<option>Klasse 6</option>
-				<option>Klasse 7</option>
-				<option>Klasse 8</option>
-				<option>Klasse 9</option>
-				<option>Klasse 10</option>
-				<option>Klasse 11</option>
-				<option>Klasse 12</option>
-				<option>Klasse 13</option>
+				<option value='Klasse 5'>Klasse 5</option>
+				<option value='Klasse 6'>Klasse 6</option>
+				<option value='Klasse 7'>Klasse 7</option>
+				<option value='Klasse 8'>Klasse 8</option>
+				<option value='Klasse 9'>Klasse 9</option>
+				<option value='Klasse 10'>Klasse 10</option>
+				<option value='Klasse 11'>Klasse 11</option>
+				<option value='Klasse 12'>Klasse 12</option>
+				<option value='Klasse 13'>Klasse 13</option>
 			</select><br>
 		</div>
 		
@@ -515,20 +515,20 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs1_bis' required=''>
 		<?php
 		if ($_SESSION['fs1_bis'] != "") {
-			echo "<option>".$_SESSION['fs1_bis']."</option>";
+			echo "<option value='".$_SESSION['fs1_bis']."'>".$_SESSION['fs1_bis']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
-				<option>Klasse 5</option>
-				<option>Klasse 6</option>
-				<option>Klasse 7</option>
-				<option>Klasse 8</option>
-				<option>Klasse 9</option>
-				<option>Klasse 10</option>
-				<option>Klasse 11</option>
-				<option>Klasse 12</option>
-				<option>Klasse 13</option>
+				<option value='Klasse 5'>Klasse 5</option>
+				<option value='Klasse 6'>Klasse 6</option>
+				<option value='Klasse 7'>Klasse 7</option>
+				<option value='Klasse 8'>Klasse 8</option>
+				<option value='Klasse 9'>Klasse 9</option>
+				<option value='Klasse 10'>Klasse 10</option>
+				<option value='Klasse 11'>Klasse 11</option>
+				<option value='Klasse 12'>Klasse 12</option>
+				<option value='Klasse 13'>Klasse 13</option>
 			</select><br>
 		</div>
 
@@ -541,18 +541,17 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs2'>
 		<?php
 		if ($_SESSION['fs2'] != "") {
-			echo "<option>".$_SESSION['fs2']."</option>";
+			echo "<option value='".$_SESSION['fs2']."'>".$_SESSION['fs2']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
-				<option></option>
-				<option>Englisch</option>
-				<option>Französisch</option>
-				<option>Spanisch</option>
-				<option>Latein</option>
-				<option>Italienisch</option>
-				<option>Russisch</option>
+				<option value='Englisch'>Englisch</option>
+				<option value='Französisch'>Französisch</option>
+				<option value='Spanisch'>Spanisch</option>
+				<option value='Latein'>Latein</option>
+				<option value='Italienisch'>Italienisch</option>
+				<option value='Russisch'>Russisch</option>
 			</select><br>
 		</div>
 
@@ -562,21 +561,21 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs2_von'>
 		<?php
 		if ($_SESSION['fs2_von'] != "") {
-			echo "<option>".$_SESSION['fs2_von']."</option>";
+			echo "<option value='".$_SESSION['fs2_von']."'>".$_SESSION['fs2_von']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
 				<option></option>
-				<option>Klasse 5</option>
-				<option>Klasse 6</option>
-				<option>Klasse 7</option>
-				<option>Klasse 8</option>
-				<option>Klasse 9</option>
-				<option>Klasse 10</option>
-				<option>Klasse 11</option>
-				<option>Klasse 12</option>
-				<option>Klasse 13</option>
+				<option value='Klasse 5'>Klasse 5</option>
+				<option value='Klasse 6'>Klasse 6</option>
+				<option value='Klasse 7'>Klasse 7</option>
+				<option value='Klasse 8'>Klasse 8</option>
+				<option value='Klasse 9'>Klasse 9</option>
+				<option value='Klasse 10'>Klasse 10</option>
+				<option value='Klasse 11'>Klasse 11</option>
+				<option value='Klasse 12'>Klasse 12</option>
+				<option value='Klasse 13'>Klasse 13</option>
 			</select><br>
 		</div>
 		
@@ -585,21 +584,21 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs2_bis' >
 		<?php
 		if ($_SESSION['fs2_bis'] != "") {
-			echo "<option>".$_SESSION['fs2_bis']."</option>";
+			echo "<option value='".$_SESSION['fs2_bis']."'>".$_SESSION['fs2_bis']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
 				<option></option>
-				<option>Klasse 5</option>
-				<option>Klasse 6</option>
-				<option>Klasse 7</option>
-				<option>Klasse 8</option>
-				<option>Klasse 9</option>
-				<option>Klasse 10</option>
-				<option>Klasse 11</option>
-				<option>Klasse 12</option>
-				<option>Klasse 13</option>
+				<option value='Klasse 5'>Klasse 5</option>
+				<option value='Klasse 6'>Klasse 6</option>
+				<option value='Klasse 7'>Klasse 7</option>
+				<option value='Klasse 8'>Klasse 8</option>
+				<option value='Klasse 9'>Klasse 9</option>
+				<option value='Klasse 10'>Klasse 10</option>
+				<option value='Klasse 11'>Klasse 11</option>
+				<option value='Klasse 12'>Klasse 12</option>
+				<option value='Klasse 13'>Klasse 13</option>
 			</select><br>
 		</div>
 
@@ -613,18 +612,18 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs3' >
 		<?php
 		if ($_SESSION['fs3'] != "") {
-			echo "<option>".$_SESSION['fs3']."</option>";
+			echo "<option value='".$_SESSION['fs3']."'>".$_SESSION['fs3']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
 				<option></option>
-				<option>Englisch</option>
-				<option>Französisch</option>
-				<option>Spanisch</option>
-				<option>Latein</option>
-				<option>Italienisch</option>
-				<option>Russisch</option>
+				<option value='Englisch'>Englisch</option>
+				<option value='Französisch'>Französisch</option>
+				<option value='Spanisch'>Spanisch</option>
+				<option value='Latein'>Latein</option>
+				<option value='Italienisch'>Italienisch</option>
+				<option value='Russisch'>Russisch</option>
 			</select><br>
 		</div>
 
@@ -634,21 +633,21 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs3_von'>
 		<?php
 		if ($_SESSION['fs3_von'] != "") {
-			echo "<option>".$_SESSION['fs3_von']."</option>";
+			echo "<option value='".$_SESSION['fs3_von']."'>".$_SESSION['fs3_von']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
 				<option></option>
-				<option>Klasse 5</option>
-				<option>Klasse 6</option>
-				<option>Klasse 7</option>
-				<option>Klasse 8</option>
-				<option>Klasse 9</option>
-				<option>Klasse 10</option>
-				<option>Klasse 11</option>
-				<option>Klasse 12</option>
-				<option>Klasse 13</option>
+				<option value='Klasse 5'>Klasse 5</option>
+				<option value='Klasse 6'>Klasse 6</option>
+				<option value='Klasse 7'>Klasse 7</option>
+				<option value='Klasse 8'>Klasse 8</option>
+				<option value='Klasse 9'>Klasse 9</option>
+				<option value='Klasse 10'>Klasse 10</option>
+				<option value='Klasse 11'>Klasse 11</option>
+				<option value='Klasse 12'>Klasse 12</option>
+				<option value='Klasse 13'>Klasse 13</option>
 			</select><br>
 		</div>
 		
@@ -657,21 +656,21 @@ if ($_SESSION['schulform'] == "bgy" OR $_SESSION['schulform'] == "bf1" OR $_SESS
 		<select style='width:100%; font-size: 16;'name='fs3_bis'>
 		<?php
 		if ($_SESSION['fs3_bis'] != "") {
-			echo "<option>".$_SESSION['fs3_bis']."</option>";
+			echo "<option value='".$_SESSION['fs3_bis']."'>".$_SESSION['fs3_bis']."</option>";
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
 		?>
 				<option></option>
-				<option>Klasse 5</option>
-				<option>Klasse 6</option>
-				<option>Klasse 7</option>
-				<option>Klasse 8</option>
-				<option>Klasse 9</option>
-				<option>Klasse 10</option>
-				<option>Klasse 11</option>
-				<option>Klasse 12</option>
-				<option>Klasse 13</option>
+				<option value='Klasse 5'>Klasse 5</option>
+				<option value='Klasse 6'>Klasse 6</option>
+				<option value='Klasse 7'>Klasse 7</option>
+				<option value='Klasse 8'>Klasse 8</option>
+				<option value='Klasse 9'>Klasse 9</option>
+				<option value='Klasse 10'>Klasse 10</option>
+				<option value='Klasse 11'>Klasse 11</option>
+				<option value='Klasse 12'>Klasse 12</option>
+				<option value='Klasse 13'>Klasse 13</option>
 			</select><br>
 		</div>
 

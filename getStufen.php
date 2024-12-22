@@ -16,7 +16,7 @@ include("./config.php"); // Stelle sicher, dass die Verbindung zur Datenbank her
 		} else {
 			echo "<option value='' disabled selected hidden></option>";
 		}
-	echo "<option>test</option>";
+	echo "<option value='test'>test</option>";
 			$select_st = $db_temp->query("SELECT kurzform, anzeigeform, langform FROM klassenstufen ORDER BY schluessel ASC");
 			$treffer_st = $select_st->rowCount();
 			

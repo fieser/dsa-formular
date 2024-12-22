@@ -237,14 +237,14 @@ if (strtotime($_SESSION['geburtsdatum']) < (time() - 18*365*24*3600)) {
 		}
 
 	if ($_SESSION['sorge1_anrede'] != "") {
-		echo "<option>".$_SESSION['sorge1_anrede']."</option>";
+		echo "<option value='".$_SESSION['sorge1_anrede']."'>".$_SESSION['sorge1_anrede']."</option>";
 	} else {
 		echo "<option value='' disabled selected hidden></option>";
 	}
 	?>
-            <option>Frau</option>
-            <option>Herr</option>
-            <option>keine</option>
+            <option value='Frau'>Frau</option>
+            <option value='Herr'>Herr</option>
+            <option value='keine'>keine</option>
         </select><br>
 	</div>
 	
@@ -395,14 +395,14 @@ if (strtotime($_SESSION['geburtsdatum']) < (time() - 18*365*24*3600)) {
 	<select style='width:100%; font-size: 16;'name='sorge2_anrede'>
 	<?php
 	if ($_SESSION['sorge2_anrede'] != "") {
-		echo "<option>".$_SESSION['sorge2_anrede']."</option>";
+		echo "<option value='".$_SESSION['sorge2_anrede']."'>".$_SESSION['sorge2_anrede']."</option>";
 	} else {
 		echo "<option value='' disabled selected hidden></option>";
 	}
 	?>
-            <option>Frau</option>
-            <option>Herr</option>
-            <option>keine</option>
+            <option value='Frau'>Frau</option>
+            <option value='Herr'>Herr</option>
+            <option value='keine'>keine</option>
         </select><br>
 	</div>
 	
