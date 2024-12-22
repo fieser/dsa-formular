@@ -50,6 +50,51 @@ if (isset($_POST['plz_submit'])) {
 
 include("./config.php");
 
+			function correctImageOrientation($imagick) {
+				$orientation = $imagick->getImageOrientation();
+				switch ($orientation) {
+					case Imagick::ORIENTATION_TOPLEFT:
+						// No rotation needed
+						break;
+					case Imagick::ORIENTATION_TOPRIGHT:
+						$imagick->flopImage();
+						break;
+					case Imagick::ORIENTATION_BOTTOMRIGHT:
+						$imagick->rotateImage(new ImagickPixel('none'), 180);
+						break;
+					case Imagick::ORIENTATION_BOTTOMLEFT:
+						$imagick->flopImage();
+						$imagick->rotateImage(new ImagickPixel('none'), 180);
+						break;
+					case Imagick::ORIENTATION_LEFTTOP:
+						$imagick->flopImage();
+						$imagick->rotateImage(new ImagickPixel('none'), -90);
+						break;
+					case Imagick::ORIENTATION_RIGHTTOP:
+						$imagick->rotateImage(new ImagickPixel('none'), 90);
+						break;
+					case Imagick::ORIENTATION_RIGHTBOTTOM:
+						$imagick->flopImage();
+						$imagick->rotateImage(new ImagickPixel('none'), 90);
+						break;
+					case Imagick::ORIENTATION_LEFTBOTTOM:
+						$imagick->rotateImage(new ImagickPixel('none'), -90);
+						break;
+				}
+				$imagick->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
+			}
+
+			// Imagick einbinden, ohne Composer
+			function convertImageToPDF($imageFile, $pdfFile) {
+				$imagick = new Imagick($imageFile);
+				correctImageOrientation($imagick);
+				$imagick->resizeImage(600, 0, Imagick::FILTER_LANCZOS, 1);
+				$imagick->setImageFormat('pdf');
+				$imagick->writeImages($pdfFile, true);
+				unlink($imageFile); // Ursprüngliche Bilddatei löschen
+				return $pdfFile;
+			}
+
 
 			function encryptFile($sourceFile, $destFile, $passphrase) {
 			$key = openssl_digest($passphrase, 'SHA256', TRUE);
@@ -60,37 +105,29 @@ include("./config.php");
 
 			// IV an den Anfang des verschlüsselten Inhalts hängen
 			$result = file_put_contents($destFile, $iv . $encrypted);
+			unlink($sourceFile); // Ursprüngliche Datei löschen
 			return $result !== false;
 		}
 
 		if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES['uploaded_file'])) {
-			
-			// Prüfen, ob eine Datei ausgewählt wurde und ob der Upload erfolgreich war
-    if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_OK) {
-        // Datei wurde erfolgreich hochgeladen, hier weitermachen mit der Verarbeitung
-        $uploadedFile = $_FILES['uploaded_file']['tmp_name'];
-        $fileType = mime_content_type($uploadedFile);
-
-        if ($fileType != 'application/pdf') {
-            // Nicht-PDF-Dateityp-Fehlermeldung
-            echo "<h2><b><font color='red'>Bitte laden Sie nur PDF-Dateien hoch!</font></b></h2>";
-        } else {
-			$uploadDir = 'dokumente/';
-			$uploadedFile = $_FILES['uploaded_file']['tmp_name'];
-			
-			$fileType = mime_content_type($uploadedFile);
-			//$destFile = $uploadDir . $_FILES['uploaded_file']['name'] . '.enc';
-			
-			// Überprüfen, ob die Datei eine PDF-Datei ist
-			if ($fileType != 'application/pdf') {
-				echo "<p>&nbsp;</p>";
-				echo "<h2><b><font color='red'>Bitte laden Sie nur PDF-Dateien hoch!</font></b></h2>";
-				echo "<p>&nbsp;</p>";
-								echo "<form id='form_w' method='post' action='".$url."upload.php'>";
-								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_zurueck' value='zurück'>";
-								echo "</form>";
-				exit;
-			}
+			if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_OK) {
+				$uploadDir = 'dokumente/';
+				$uploadedFile = $_FILES['uploaded_file']['tmp_name'];
+		
+				$fileType = mime_content_type($uploadedFile);
+				$allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif'];
+		
+				if (!in_array($fileType, $allowedTypes)) {
+					echo "<h2><b><font color='red'>Bitte laden Sie nur PDF oder Bilddateien (JPG, PNG, GIF) hoch!</font></b></h2>";
+					exit;
+				}
+		
+				if ($fileType !== 'application/pdf') {
+					$newPDFPath = $uploadDir . pathinfo($_FILES['uploaded_file']['name'], PATHINFO_FILENAME) . '.pdf';
+					$uploadedFile = convertImageToPDF($uploadedFile, $newPDFPath);
+					$fileType = 'application/pdf';
+				}
+		
 			
 			$destFile = $uploadDir.$_SESSION['id_upload'].'.enc';
 			$fileName = $_SESSION['id_upload'].'.'.time().'.pdf.enc';
@@ -164,7 +201,7 @@ include("./config.php");
 			} else {
 				echo "<h2><b><font color='red'>Fehler bei der Verschlüsselung der Datei.</font></b></h2>";
 			}
-		}
+		
     } else if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_NO_FILE) {
         // Keine Datei wurde hochgeladen
         echo "<h2><b><font color='red'>Bitte wählen Sie eine Datei zum Hochladen aus!</font></b></h2>";
@@ -207,7 +244,7 @@ include("./config.php");
 						echo "<img src='./images/upload3.svg' width='130px'>";
 						echo "</td>";
 						echo "<td style='padding-left: 2em;'>";
-						echo "<h2>Upload von Dokumenten als PDF-Datei</h2>";
+						echo "<h2>Upload von Dokumenten als PDF- oder Bilddatei</h2>";
 						echo "Bevor Sie PDF-Dokumente hochladen können benötigen wir noch ein paar Angaben:<br>";
 
 						echo "<form action='upload.php' method='post' enctype='multipart/form-data'>";
@@ -237,14 +274,16 @@ include("./config.php");
 						echo "<img src='./images/upload3.svg' width='130px'>";
 						echo "</td>";
 						echo "<td style='padding-left: 2em;'>";
-						echo "<h2>Upload von Dokumenten als PDF-Datei</h2>";
+						echo "<h2>Upload von Dokumenten als PDF- oder Bilddatei</h2>";
 						if ($upload_dokumente == 1) {
 							echo "Unterlagen, die wir nicht in beglaubigter Form benötigen <i>(z.B. Halbjahreszeugnis, Lebenslauf und Personalausweis)</i>, können Sie hier hochladen.<br>
 							Die Zusendung per Post oder eine persönliche Abgabe im Sekretariat ist für diese Dokumente dann nicht mehr erforderlich.";
 
 							echo "<form action='upload.php' method='post' enctype='multipart/form-data'>";
 							echo "<p>Wählen Sie eine Datei zum Hochladen aus:</p>";
-							echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file'>";
+							//echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file' capture='environment'>";
+							echo "<input type='file' accept='.pdf,application/pdf,image/jpeg,image/png,image/gif,image/bmp,image/webp' name='uploaded_file' capture='environment'>";
+
 							echo "<input type='submit' style='margin-top: 1.3em;' class='btn btn-default btn-sm' name='upload_submit' value='Hochladen und verschlüsseln'>";
 							echo "</form>";
 						} else {

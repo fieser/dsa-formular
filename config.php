@@ -138,7 +138,8 @@ function checkAndCorrectStreet($strasse, $plz) {
     $overpassJson = json_decode($overpassResponse, true);
 
     if (empty($overpassJson) || !isset($overpassJson['elements'])) {
-        die('Keine Daten von Overpass API erhalten.');
+        //die('Keine Daten von Overpass API erhalten.');
+        echo "Keine Daten von Overpass API erhalten.";
     }
 
     // Initialisieren eines Arrays zur Speicherung der Straßen

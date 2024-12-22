@@ -129,138 +129,144 @@ $nachname = $_SESSION['nachname'];
 	//Dateiupload:
 	
 	if (isset($_POST['upload_submit'])) {
-	
-			function encryptFile($sourceFile, $destFile, $passphrase) {
-			$key = openssl_digest($passphrase, 'SHA256', TRUE);
-			$iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-
-			$fileContent = file_get_contents($sourceFile);
-			$encrypted = openssl_encrypt($fileContent, 'aes-256-cbc', $key, 0, $iv);
-
-			// IV an den Anfang des verschlüsselten Inhalts hängen
-			$result = file_put_contents($destFile, $iv . $encrypted);
-			return $result !== false;
+		function correctImageOrientation($imagick) {
+			$orientation = $imagick->getImageOrientation();
+			switch ($orientation) {
+				case Imagick::ORIENTATION_TOPLEFT:
+					// No rotation needed
+					break;
+				case Imagick::ORIENTATION_TOPRIGHT:
+					$imagick->flopImage();
+					break;
+				case Imagick::ORIENTATION_BOTTOMRIGHT:
+					$imagick->rotateImage(new ImagickPixel('none'), 180);
+					break;
+				case Imagick::ORIENTATION_BOTTOMLEFT:
+					$imagick->flopImage();
+					$imagick->rotateImage(new ImagickPixel('none'), 180);
+					break;
+				case Imagick::ORIENTATION_LEFTTOP:
+					$imagick->flopImage();
+					$imagick->rotateImage(new ImagickPixel('none'), -90);
+					break;
+				case Imagick::ORIENTATION_RIGHTTOP:
+					$imagick->rotateImage(new ImagickPixel('none'), 90);
+					break;
+				case Imagick::ORIENTATION_RIGHTBOTTOM:
+					$imagick->flopImage();
+					$imagick->rotateImage(new ImagickPixel('none'), 90);
+					break;
+				case Imagick::ORIENTATION_LEFTBOTTOM:
+					$imagick->rotateImage(new ImagickPixel('none'), -90);
+					break;
+			}
+			$imagick->setImageOrientation(Imagick::ORIENTATION_TOPLEFT);
 		}
+	
 
-		if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES['uploaded_file'])) {
-			// Prüfen, ob eine Datei ausgewählt wurde und ob der Upload erfolgreich war
+// Imagick einbinden, ohne Composer
+function convertImageToPDF($imageFile, $pdfFile) {
+    $imagick = new Imagick($imageFile);
+	correctImageOrientation($imagick);
+
+        $imagick->resizeImage(600, 0, Imagick::FILTER_LANCZOS, 1);
+
+    $imagick->setImageFormat('pdf');
+    $imagick->writeImages($pdfFile, true);
+    unlink($imageFile); // Ursprüngliche Bilddatei löschen
+    return $pdfFile;
+}
+
+function encryptFile($sourceFile, $destFile, $passphrase) {
+    $key = openssl_digest($passphrase, 'SHA256', TRUE);
+    $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+
+    $fileContent = file_get_contents($sourceFile);
+    $encrypted = openssl_encrypt($fileContent, 'aes-256-cbc', $key, 0, $iv);
+
+    // IV an den Anfang des verschlüsselten Inhalts hängen
+    $result = file_put_contents($destFile, $iv . $encrypted);
+    unlink($sourceFile); // Ursprüngliche Datei löschen
+    return $result !== false;
+}
+
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_FILES['uploaded_file'])) {
     if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_OK) {
-			$uploadDir = 'dokumente/';
-			$uploadedFile = $_FILES['uploaded_file']['tmp_name'];
-			
-			$fileType = mime_content_type($uploadedFile);
-			//$destFile = $uploadDir . $_FILES['uploaded_file']['name'] . '.enc';
-			
-			// Überprüfen, ob die Datei eine PDF-Datei ist
-			if ($fileType != 'application/pdf') {
-				echo "<p>&nbsp;</p>";
-				echo "<b>Bitte laden Sie nur PDF-Dateien hoch!</b>";
-				echo "<p>&nbsp;</p>";
-								echo "<form id='form_w' method='post' action='".$url."upload.php'>";
-								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_zurueck' value='zurück'>";
-								echo "</form>";
-				exit;
-			}
-			
-			$destFile = $uploadDir.$summe_o_sf.'.'.time().'.pdf.enc';
-			$fileName = $summe_o_sf.'.'.time().'.pdf.enc';
+        $uploadDir = 'dokumente/';
+        $uploadedFile = $_FILES['uploaded_file']['tmp_name'];
 
-			// Stellen Sie sicher, dass das Verzeichnis existiert
-			if (!file_exists($uploadDir)) {
-				mkdir($uploadDir, 0777, true);
-			}
-			
-			
-			    // Dateinamen anpassen, um Überschreibungen zu vermeiden
-				$newFilePath = $uploadDir . $fileName;
-				$fileCounter = 1;
-				$fileExtension = "pdf.enc";
+        $fileType = mime_content_type($uploadedFile);
+        $allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/gif'];
 
-				while (file_exists($newFilePath)) {
-					// Dateinamen um eine Ziffer erhöhen
-					$newFileName = pathinfo($fileName, PATHINFO_FILENAME) . "_" . $fileCounter . '.' . $fileExtension;
-					$newFilePath  = $uploadDir . $newFileName;
-					$fileCounter++;
-				}
-			//$summe_o_sf = md5($mail.$geburtsdatum);
-			$password = md5(md5($mail.$geburtsdatum).$_SESSION['plz']);  // Dies sollte in einer sicheren Konfigurationsdatei gespeichert werden
+        if (!in_array($fileType, $allowedTypes)) {
+            echo "<h2><b><font color='red'>Bitte laden Sie nur PDF oder Bilddateien (JPG, PNG, GIF) hoch!</font></b></h2>";
+            exit;
+        }
 
-			//Für die Demo-Funktion:
-			if ($_SESSION['test'] != 1) {
+        if ($fileType !== 'application/pdf') {
+            $newPDFPath = $uploadDir . pathinfo($_FILES['uploaded_file']['name'], PATHINFO_FILENAME) . '.pdf';
+            $uploadedFile = convertImageToPDF($uploadedFile, $newPDFPath);
+            $fileType = 'application/pdf';
+        }
 
-				if (encryptFile($uploadedFile, $newFilePath, $password)) {
-					echo "<h2><b><font color='green'>Datei erfolgreich hochgeladen und verschlüsselt.</font></b></h2>";
-					if ($fileCounter == 1) {
-				//		echo "<p>Insgesamt haben Sie heute 1 Datei hochgeladen.</p>";
-					} else {
-				//		echo "<p>Insgesamt haben Sie heute ".$fileCounter." Dateien hochgeladen.</p>";
-					}
-					
-					//Zip-Archiv erstellen:
-					$sourceDir = 'dokumente/'; // Verzeichnis, in dem sich die .enc Dateien befinden
-					$zipFile = $sourceDir . 'dokumente.zip'; // Pfad zur ZIP-Datei
+        // Dateiname generieren basierend auf $summe_o_sf und Zeitstempel
+        $summe_o_sf = md5($mail . $geburtsdatum); // Sicherstellen, dass $mail und $geburtsdatum definiert sind
+        $fileName = $summe_o_sf . '.' . time() . '.pdf.enc';
+        $destFile = $uploadDir . $fileName;
 
-					// Erstellen eines neuen ZIP-Archivs
-					$zip = new ZipArchive();
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
-					// ZIP-Datei öffnen und überschreiben, wenn sie bereits existiert
-					if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-						exit("<h2><b><font color='red'>Konnte ZIP-Datei nicht öffnen oder erstellen.</font></b></h2>");
-					}
+        $password = md5(md5($mail . $geburtsdatum) . $_SESSION['plz']);
 
-					// Dateien im Verzeichnis auflisten
-					$files = new DirectoryIterator($sourceDir);
-					foreach ($files as $file) {
-						if ($file->isFile() && $file->getExtension() === 'enc') {
-							// Datei zum ZIP-Archiv hinzufügen
-							$zip->addFile($file->getPathname(), $file->getFilename());
-						}
-					}
+        if (encryptFile($uploadedFile, $destFile, $password)) {
+            echo "<h2><b><font color='green'>Datei erfolgreich hochgeladen, in PDF konvertiert und verschlüsselt.</font></b></h2>";
 
-					// ZIP-Archiv abschließen und schließen
-					$zip->close();
+            $zipFile = $uploadDir . 'dokumente.zip';
+            $zip = new ZipArchive();
 
-					//echo "ZIP-Archiv wurde erfolgreich erstellt: $zipFile";
-					
-					
-					
-					
-					
-				} else {
-					echo "Fehler bei der Verschlüsselung der Datei.";
-				}
-			} else {
-				echo "Es wurde keine Datei hochgeladen, weil Sie sich im Testmodus befinden.";
-			}
-		} else if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_NO_FILE) {
-        // Keine Datei wurde hochgeladen
+            if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+                exit("<h2><b><font color='red'>Konnte ZIP-Datei nicht öffnen oder erstellen.</font></b></h2>");
+            }
+
+            $files = new DirectoryIterator($uploadDir);
+            foreach ($files as $file) {
+                if ($file->isFile() && $file->getExtension() === 'enc') {
+                    $zip->addFile($file->getPathname(), $file->getFilename());
+                }
+            }
+
+            $zip->close();
+
+        } else {
+            echo "<h2><b><font color='red'>Fehler bei der Verschlüsselung der Datei.</font></b></h2>";
+        }
+    } else if ($_FILES['uploaded_file']['error'] === UPLOAD_ERR_NO_FILE) {
         echo "<h2><b><font color='red'>Bitte wählen Sie eine Datei zum Hochladen aus!</font></b></h2>";
     } else {
-        // Andere Fehler beim Hochladen
         echo "<h2><b><font color='red'>Fehler beim Hochladen der Datei. Bitte versuchen Sie es erneut.</font></b></h2>";
     }
-		} else {
-			if (isset($_POST['upload_submit'])) {
-				echo "<p><b><font color='red'>Keine Datei zum Hochladen erhalten.</font></b></p>";
-			}
-		}
-	
-								//Buttons:
-								
-								echo "<p><b>Nutzen Sie folgenden Link, um jetzt oder später weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
-								echo "<b><a href='".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."'>".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."</a></b><br>";
-								echo "<div style='margin-top: 1em;'><small>(Um diesen Link später nutzen zu können, müssen Sie ihn jetzt speichern oder notieren.)</small></div>";
-								echo "<p>&nbsp;</p>";
-								echo "<form id='form_n' method='post' action='./index.php'>";
-								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_n' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
-								echo "</form>";
-								echo "<p>&nbsp;</p>";
-								echo "<form id='form_w' method='post' action='".$website."'>";
-								echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_website' value='zu unserer Website'>";
-								echo "</form>";
+} else {
+    if (isset($_POST['upload_submit'])) {
+        echo "<h2><b><font color='red'>Keine Datei zum Hochladen erhalten.</font></b></h2>";
+    }
+}
+
+echo "<p><b>Nutzen Sie folgenden Link, um jetzt oder später weitere Dokumente zu Ihrer Anmeldung hochzuladen.</b></p>";
+echo "<b><a href='".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."'>".$url."upload.php?id=".$summe_o_sf."&id2=".$_SESSION['plz']."</a></b><br>";
+echo "<div style='margin-top: 1em;'><small>(Um diesen Link später nutzen zu können, müssen Sie ihn jetzt speichern oder notieren.)</small></div>";
+echo "<p>&nbsp;</p>";
+echo "<form id='form_n' method='post' action='./index.php'>";
+echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_n' type='submit' name='submit_neu' value='weitere Anmeldung erstellen'>";
+echo "</form>";
+echo "<p>&nbsp;</p>";
+echo "<form id='form_w' method='post' action='".$website."'>";
+echo "<input  style='width: 20em;' class='btn btn-default btn-sm'  method='post' id='form_w' type='submit' name='submit_website' value='zu unserer Website'>";
+echo "</form>";
+
 		
-		
-	} else {
+	} else { //Ende Dateiupload
 	
 	//Prioritäten prüfen:
 	if (isset($_POST['prio_1']) AND $_POST['prio_1'] != "") {
@@ -571,7 +577,10 @@ if (isset($_POST['submit_weiter']) AND $_POST['dsgvo'] == 1) {
 
 									echo "<form action='senden.php' method='post' enctype='multipart/form-data'>";
 									echo "<p>Wählen Sie eine Datei zum Hochladen aus:</p>";
-									echo "<input type='file' accept='.pdf,application/pdf' name='uploaded_file'>";
+									
+									//Hochladbare Dateitypen
+									echo "<input type='file' accept='.pdf,application/pdf,image/jpeg,image/png,image/gif,image/bmp,image/webp' name='uploaded_file' capture='environment'>";
+
 									echo "<input type='submit' style='margin-top: 1.3em;' class='btn btn-default btn-sm' name='upload_submit' value='Hochladen und verschlüsseln'>";
 									echo "</form>";
 									echo "</td>";

@@ -200,7 +200,7 @@ if ($bvj_aktiv == 1) {
 echo "<div class='box-grau'>";
 	echo "<div class='flex-container'>";
 		echo "<div class='flex-item-left'>";
-		echo "<p><b>kein Abschluss</b></p>";
+		echo "<p><b>noch keinen Abschluss</b></p>";
 				echo "</div>";
 
 		echo "<div class='flex-item-pfeil'>";
