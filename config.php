@@ -1,27 +1,4 @@
  <?php
- 
-
-
-
- // URL zum Verzeichnis in dem die PHP-Dateien und Unterordner abgelegt wurden:
- $url = "https://anmeldung.bbs1-mainz.de/"; // BITTE mit / abschließen!
- $website = "https://www.bbs1-mainz.com";
- $workdir = "/anmeldung/"; // BITTE mit / beginnen und abschließen!
- $pfad_verbinden = "/var/www/"; // BITTE mit / abschließen!
-
- $datei_pdf_download = "anmeldung-bbs1-mainz.pdf";
-
-
-$_SESSION['schule_name1'] = 'Berufsbildende Schule 1';
-$_SESSION['schule_name2'] = '- Gewerbe und Technik -';
-$_SESSION['schule_strasse_nr'] = 'Am Judensand 12';
-$_SESSION['schule_plz_ort'] = '55122 Mainz';
-$_SESSION['schule_kurz'] = 'bbs1'; //Bitte nur Kleinbuchstaben
-	
-	
-//Einstellungen:
-$vorbelegen_sorge1 = 1; //Adressdaten von Sorgeberechtigter 1 wird bei Minderjährigen mit deren Adressdaten vorbelegt.
-$strasse_pruefen = 1;
 
 //Schuljahr:
 $schuljahresbeginn_n = "18.08.2025"; //Beginn nächstes Schuljahr
@@ -32,23 +9,56 @@ $schuljahr_a = "2024-2025"; //Aktuelles Schuljahr
 // Verbindung zur Datenbank aufbauen.
 //include "/var/www/verbinden.php";
 
-include $pfad_verbinden."verbinden_temp.php";
+ $pfad_verbinden = "/var/www/"; // BITTE mit / abschließen!
+
+include ($pfad_verbinden."verbinden_temp.php");
+
+function config($e) {
+    global $db_temp;
+	$select_conf = $db_temp->query("SELECT * FROM config WHERE (einstellung LIKE '$e')");
+	foreach($select_conf as $conf) {
+		return $conf['wert'];
+	}
+	
+}
+
+
+ // URL zum Verzeichnis in dem die PHP-Dateien und Unterordner abgelegt wurden:
+ $url = config("url_formular"); // BITTE mit / abschließen!
+ $website = config("website");
+ $workdir = "/anmeldung/"; // BITTE mit / beginnen und abschließen!
+
+
+ $datei_pdf_download = "anmeldung-bbs1-mainz.pdf";
+
+
+$_SESSION['schule_name1'] = config("schule_name1");
+$_SESSION['schule_name2'] = config("schule_name2");
+$_SESSION['schule_strasse_nr'] = config("schule_strasse_nr");
+$_SESSION['schule_plz_ort'] = config("schule_plz_ort");
+$_SESSION['schule_kurz'] = config("schule_kurz"); //Bitte nur Kleinbuchstaben
+	
+	
+//Einstellungen:
+$vorbelegen_sorge1 = config("vorbelegen_sorge1"); //Adressdaten von Sorgeberechtigter 1 wird bei Minderjährigen mit deren Adressdaten vorbelegt.
+$strasse_pruefen = config("strasse_pruefen");
+
 
 
 //Schulformen aktivieren/deaktivieren:
-$bs_aktiv = 1;
-$bvj_aktiv = 1;
-$aph_aktiv = 0;
-$bf1_aktiv = 1;
-$bf2_aktiv = 1;
-$bfp_aktiv = 0;
-$bos1_aktiv = 0;
-$bos2_aktiv = 0;
-$dbos_aktiv = 1;
-$bgy_aktiv = 1;
-$fs_aktiv = 1;
-$fsof_aktiv = 0;
-$hbf_aktiv = 1;
+$bs_aktiv = config("bs_aktiv");
+$bvj_aktiv = config("bvj_aktiv");
+$aph_aktiv = config("aph_aktiv");
+$bf1_aktiv = config("bf1_aktiv");
+$bf2_aktiv = config("bf2_aktiv");
+$bfp_aktiv = config("bfp_aktiv");
+$bos1_aktiv = config("bos1_aktiv");
+$bos2_aktiv = config("bos2_aktiv");
+$dbos_aktiv = config("dbos_aktiv");
+$bgy_aktiv = config("bgy_aktiv");
+$fs_aktiv = config("fs_aktiv");
+$fsof_aktiv = config("fsof_aktiv");
+$hbf_aktiv = config("hbf_aktiv");
 
 //Wie sind Sie auf uns aufmerksam geworden?
 
@@ -56,12 +66,12 @@ $umfrage = 1;
 
 //Einstellungen:
 $min_anzahl_betriebe = 4; //Wenn weniger Betriebe zum Beruf gefunden werden, werden alle Betriebe angezeigt.
-$upload_dokumente = 1;
+$upload_dokumente = config("upload_documents");
 
 $wartungsmodus = 0;
 $wartungsmodus_ende = "01.05.2024"; //einschließlich diesem Datum
 
-$popup_anzeigen_sj = true; // Setze auf false, um das Popup zu deaktivieren
+$popup_anzeigen_sj = config("popup_anzeigen_sj");
 
 // FUNKTIONEN:
 
@@ -198,6 +208,7 @@ function levenshteinSimilarity($str1, $str2) {
     $maxLen = max(strlen($str1), strlen($str2));
     return ($maxLen - $levDist) / $maxLen;
 }
+
 
 // Beispielaufruf der Funktion
 //$strasse = 'Invalidenstrase';

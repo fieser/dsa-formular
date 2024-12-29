@@ -247,7 +247,7 @@ if (isset($_GET['sf'])) {
 
 
 
-if ($popup_anzeigen_sj AND $_SESSION['schulform'] != "bs" AND $fehlertext == "" AND !isset($_POST['submit_zurueck'])): 
+if ($popup_anzeigen_sj == 1 AND $_SESSION['schulform'] != "bs" AND $fehlertext == "" AND !isset($_POST['submit_zurueck'])): 
     echo '<div class="overlay" id="popupOverlay"></div>';
     echo "<div class='popup' id='popup'>";
     echo "<h2 style='margin-top: 0em;'><b>Hinweis</h2></b>";
