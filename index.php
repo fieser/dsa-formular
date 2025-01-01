@@ -167,7 +167,7 @@ if (isset($_GET['test'])) {
     <h1 style='margin-bottom: 2em;'><b>Digitale Anmeldeformulare</b></h1>
 <?php
 
-if ($_SERVER['REMOTE_ADDR'] == "217.198.244.140" OR $wartungsmodus != 1) {
+if ($_SERVER['REMOTE_ADDR'] == $wartungsmodus_ausnahme OR $wartungsmodus != 1) {
 
 echo "<div class='box-grau mobile-off'>";
 	echo "<div class='flex-container'>";

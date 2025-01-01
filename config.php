@@ -68,8 +68,9 @@ $umfrage = 1;
 $min_anzahl_betriebe = 4; //Wenn weniger Betriebe zum Beruf gefunden werden, werden alle Betriebe angezeigt.
 $upload_dokumente = config("upload_documents");
 
-$wartungsmodus = 0;
-$wartungsmodus_ende = "01.05.2024"; //einschließlich diesem Datum
+$wartungsmodus = config("wartungsmodus");
+$wartungsmodus_ausnahme = config("wartungsmodus_ausnahme");
+$wartungsmodus_ende = "06.01.2025"; //einschließlich diesem Datum
 
 $popup_anzeigen_sj = config("popup_anzeigen_sj");
 
