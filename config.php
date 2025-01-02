@@ -37,6 +37,7 @@ $_SESSION['schule_name2'] = config("schule_name2");
 $_SESSION['schule_strasse_nr'] = config("schule_strasse_nr");
 $_SESSION['schule_plz_ort'] = config("schule_plz_ort");
 $_SESSION['schule_kurz'] = config("schule_kurz"); //Bitte nur Kleinbuchstaben
+$_SESSION['schule_mail'] = config("schule_mail");
 	
 	
 //Einstellungen:
@@ -67,6 +68,9 @@ $umfrage = 1;
 //Einstellungen:
 $min_anzahl_betriebe = 4; //Wenn weniger Betriebe zum Beruf gefunden werden, werden alle Betriebe angezeigt.
 $upload_dokumente = config("upload_documents");
+
+$login_betriebe = config("login_betriebe");
+$mail_betriebe = config("mail_betriebe");
 
 $wartungsmodus = config("wartungsmodus");
 $wartungsmodus_ausnahme = config("wartungsmodus_ausnahme");

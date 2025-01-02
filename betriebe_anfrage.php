@@ -181,10 +181,12 @@ echo ' <br>';
 
 } else { 
 
+echo "<h1>Zugangslink anforden</h1><br>";
 
-
+if ($login_betriebe == 1 AND ($wartungsmodus != 1 OR $_SERVER['REMOTE_ADDR'] == $wartungsmodus_ausnahme)) {
 ?>
-<h1>Zugangslink anforden</h1><br>
+
+
 
 <p>Wenn Ihre Email-Adresse in unserem Schulverwaltungsprogramm hinterlegt ist, können Sie einen Zugangslink anfordern.
 <br>Über den Zugangslink können Sie sich die zu Ihrem Betrieb bei uns hinterlegten Daten anzeigen lassen, sie überprüfen und ggf. von unserem Sekretariat korrigieren oder ergänzen lassen.</p>
@@ -210,18 +212,26 @@ Sie können eine beliebige zu Ihrem Unternehmen bei uns gespeicherte Email-Adres
 	</table>
 
 <?php
+} else {
+	echo "<p>Der Zugriff auf Betriebsdaten ist momentan deaktiviert.</p>";
+	echo "<p>Bitte versuchen Sie es später erneut.</p>";
 
+}
 }
 ?>
 	<p>&nbsp;</p>
 	<p>&nbsp;</p>
 	<table>
-	<p>Kontaktieren Sie unser Sekretariat (<a href='mailto:sekretariat@bbs1-mainz.de'>sekretariat@bbs1-mainz.de</a>), falls Ihre E-Mail-Adresse nicht bei uns hinterlegt ist!</p>
-	
+<?php
+if ($login_betriebe == 1 AND ($wartungsmodus != 1 OR $_SERVER['REMOTE_ADDR'] == $wartungsmodus_ausnahme)) {
+	echo "<p>Kontaktieren Sie unser Sekretariat (<a href='mailto:sekretariat@bbs1-mainz.de'>sekretariat@bbs1-mainz.de</a>), falls Ihre E-Mail-Adresse nicht bei uns hinterlegt ist!</p>";
+}
+?>
 <tr height="30"></tr>
 <tr>
 <td>
 <?PHP
+
 if ($_GET['back'] == "abmeldung") {
 	?>
 	<form method="post" action="./abmeldung.php">
